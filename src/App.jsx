@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function App() {
 
@@ -6,10 +6,12 @@ function App() {
   const [user, setUser] = useState('ramji-dev');
   const [repo, setRepo] = useState([]);
   const [loading, isLoading] = useState(true);
-
+  
   const url = `https://api.github.com/users/${user}`;
   const repo_url = `https://api.github.com/users/${user}/repos`;
   
+  const searchRef = useRef(null);
+
   useEffect(() => {
     try {
       const userData = async () => {
@@ -57,6 +59,11 @@ function App() {
   }
 
 
+  const handleClick = () => {
+    setUser(searchRef.current.value);
+  }
+
+
   const {avatar_url, login, followers, following, html_url} = user;
 
   return (
@@ -85,7 +92,8 @@ function App() {
         }
       </div>
       <div className='flex items-center justify-center flex-col sm:flex-row'>
-        <input type="text" onKeyDown={handleKeydown} className='p-2 px-4 bg-transparent placeholder:text-green-600 mb-2 sm:mb-0 sm:mr-2 text-green-400 border-2 border-green-400 rounded-full' placeholder='Search Username'/>
+        <input type="text" ref={searchRef} onKeyDown={handleKeydown} className='p-2 px-4 bg-transparent placeholder:text-green-600 mb-2 sm:mb-0 sm:mr-2 text-green-400 border-2 border-green-400 rounded-full' placeholder='Search Username'/>
+        <button  className='bg-green-400 p-2 px-4 rounded-full' onClick={handleClick}>Search</button>
       </div>
     </div>
   )
